@@ -28,6 +28,7 @@ class MarvelRest {
     
     private static let session = URLSession(configuration: configuration)
     
+    
     class func loadMarvelAPI(name: String?, page: Int = 0, onComplete: @escaping (MarvelInfo?) -> Void){
         
         let offset = page * limit

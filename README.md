@@ -11,4 +11,6 @@ Aplicativo construído para exibir dados dos personagens da Marvel Comics, no qu
 		- [x] Dependência SwiftHash para produzir um hash/MD5 para a url de request
 	- [x] Arquitetura MVC
 	- [x] Verifica o status da conexão com a internet através da classe NetworkConnection.swift
+    
+    Obs.: Caixa de pesquisa foi implmentada porém não consegui evoluir com as buscas dos personagens.
 

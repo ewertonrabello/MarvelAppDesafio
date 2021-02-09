@@ -8,16 +8,6 @@
 import UIKit
 
 @available(iOS 13.0, *)
-@available(iOS 13.0, *)
-@available(iOS 13.0, *)
-@available(iOS 13.0, *)
-@available(iOS 13.0, *)
-@available(iOS 13.0, *)
-@available(iOS 13.0, *)
-@available(iOS 13.0, *)
-@available(iOS 13.0, *)
-@available(iOS 13.0, *)
-@available(iOS 13.0, *)
 class CharactersCollectionViewController: UICollectionViewController {
     
     // label status/erro
@@ -35,43 +25,54 @@ class CharactersCollectionViewController: UICollectionViewController {
     var page: Int = 0
     var total: Int = 0
     
+    @IBOutlet weak var searchCharacter: UITextField!
     override func viewDidLoad() {
-        super.viewDidLoad()
+        
         
         loadCharacters()
-        
+        self.searchCharacter.delegate = self
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-
+        super.viewDidLoad()
     }
+    
+    
     
     @IBAction func loadCharacters(){
         
         if(checkConnection.checkConnection()){
-            marvelManagerStored.loadCharacters(context: context)
-            label.text = "searching characters..."
-            MarvelRest.loadMarvelAPI(name: "", page: page) { (marvel) in
-                
-                if(marvel != nil){
+            if(searchCharacter.text == nil){
+                print (searchCharacter.text)
+            }
+            else{
+                marvelManagerStored.loadCharacters(context: context)
+                label.text = "searching characters..."
+                MarvelRest.loadMarvelAPI(name: "", page: page) { (marvel) in
                     
-                    self.characters += (marvel?.data.results)!
-                    self.total = (marvel?.data.total)!
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                        self.label.text = self.total < 1 ? "not found character." : ""
+                    if(marvel != nil){
+                        
+                        self.characters += (marvel?.data.results)!
+                        self.total = (marvel?.data.total)!
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                            self.label.text = self.total < 1 ? "not found character." : ""
+                        }
+                    }
+                    else{
+                        self.label.text = "error!"
                     }
                 }
-                else{
-                    self.label.text = "error!"
-                }
             }
-        }
+            
+            }
         else{
     
             self.label.text = "not connection internet!"
             collectionView.backgroundView = label
         }
+            
     }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -118,3 +119,14 @@ class CharactersCollectionViewController: UICollectionViewController {
     }
 
 }
+
+
+extension CharactersCollectionViewController:UITextFieldDelegate{
+    
+    @IBAction func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.tag == 27 {
+            self.loadCharacters()
+            }
+        }
+}
+
